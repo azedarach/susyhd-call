@@ -16,7 +16,7 @@
 namespace mathematica {
 
 #ifdef ENABLE_MATHLINK_H
-enum Error_codes : int {
+enum Error_code : int {
    SUCCESS = MLEOK,
    DEAD_LINK = MLEDEAD,
    BAD_DATA = MLEGBAD,   
@@ -59,7 +59,7 @@ enum Error_codes : int {
    NEED_BIGGER_BUFFER = MLENEEDBIGGERBUFFER   
 };
 #else
-enum Error_codes : int {
+enum Error_code : int {
    SUCCESS = WSEOK,
    DEAD_LINK = WSEDEAD,
    BAD_DATA = WSEGBAD,   
