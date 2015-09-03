@@ -1,7 +1,6 @@
 
 #include "mathematica_link.hpp"
 #include "mathematica_error.hpp"
-#include "mathematica_error_codes.hpp"
 
 #ifdef ENABLE_MATHLINK_H
 #define PREFIXED_MATH_FUNCTION(function) ML##function
@@ -41,6 +40,66 @@ MathematicaLink::~MathematicaLink()
 {
    PREFIXED_MATH_FUNCTION(Close)(link);
    PREFIXED_MATH_FUNCTION(Deinitialize)(env);
+}
+
+void MathematicaLink::put_function(const char* s, int n)
+{
+   PREFIXED_MATH_FUNCTION(PutFunction)(link, s, n);
+}
+
+void MathematicaLink::put_string(const char* s)
+{
+   PREFIXED_MATH_FUNCTION(PutString)(link, s);
+}
+
+void MathematicaLink::put_symbol(const char* s)
+{
+   PREFIXED_MATH_FUNCTION(PutSymbol)(link, s);
+}
+
+void MathematicaLink::put_integer(int n)
+{
+   PREFIXED_MATH_FUNCTION(PutInteger)(link, n);
+}
+
+void MathematicaLink::flush()
+{
+   PREFIXED_MATH_FUNCTION(Flush)(link);
+}
+
+int MathematicaLink::get_integer()
+{
+   int result;
+   PREFIXED_MATH_FUNCTION(GetInteger)(link, &result);
+
+   return result;
+}
+
+void MathematicaLink::next_packet()
+{
+   PREFIXED_MATH_FUNCTION(NextPacket)(link);
+}
+
+void MathematicaLink::new_packet()
+{
+   PREFIXED_MATH_FUNCTION(NewPacket)(link);
+}
+
+void MathematicaLink::end_packet()
+{
+   PREFIXED_MATH_FUNCTION(EndPacket)(link);
+}
+
+void MathematicaLink::wait_for_packet_of_type(Packet_type pkt)
+{
+   int p;
+   while ((p = PREFIXED_MATH_FUNCTION(NextPacket)(link)) && p != pkt)
+      PREFIXED_MATH_FUNCTION(NewPacket)(link);
+}
+
+int MathematicaLink::get_error()
+{
+   return PREFIXED_MATH_FUNCTION(Error)(link);
 }
 
 } // namespace mathematica
