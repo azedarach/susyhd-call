@@ -15,7 +15,7 @@ LIBMATHLINK_CONFIG_HDR := \
 
 LIBMATHLINK_HDR := \
 		$(DIR)/mathematica_error.hpp \
-		$(DIR)/mathematica_error_codes.hpp \
+		$(DIR)/mathematica_error_code.hpp \
 		$(DIR)/mathematica_link.hpp \
 		$(DIR)/mathematica_packet.hpp \
 		$(DIR)/mathematica_types.hpp
