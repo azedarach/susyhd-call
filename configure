@@ -1804,15 +1804,17 @@ check_cxx_dep_gen
 check_cxx_dep_gen_type
 check_cc
 check_makelib
+check_math_cmd
+check_mathematica_version
 # additional libraries needed for linking
 if test "x${operating_system}" = "xLinux" ; then
     check_thread_libs
     check_dl_libs
     check_rt_libs
-    check_uuid_libs
+    if test "x${MATH_VERSION}" = "x10." ; then
+	check_uuid_libs
+    fi
 fi
-check_math_cmd
-check_mathematica_version
 if test "x${enable_mathlink}" = "xyes" ; then
     check_mathlink_incl
     check_mathlink_interface_version
