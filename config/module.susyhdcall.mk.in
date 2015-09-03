@@ -1,0 +1,64 @@
+DIR                := addons/@ADDON_DIR@
+SUSYHDCALL_BASEDIR := $(DIR)
+MODNAME            := @ADDON_NAME@
+
+SUSYHDCALL_MK  := \
+		$(DIR)/module.mk
+
+SUSYHDCALL_HDR := \
+		$(DIR)/susyhd_call.hpp
+
+# Makefile (sub)modules for addon
+SUBMODULES   := $(DIR)/mathematica $(DIR)/susyhd
+
+# Addon specific variables for compilation
+MLINKFLAGS       := @MLINKFLAGS@
+MLINKLIBS        := @MLINKLIBS@
+DLLIBS           := @DLLIBS@
+RTLIBS           := @RTLIBS@
+EXTRA_MLINK_LIBS := @EXTRA_MLINK_LIBS@
+
+# the submodules add their dependency files to this variable
+SUSYHDCALL_ALLDEP :=
+# the submodules add their source files to this variable
+SUSYHDCALL_ALLSRC :=
+# the submodules add their libraries to this variable
+SUSYHDCALL_ALLLIB :=
+# the submodules register their names in this variable
+SUSYHDCALL_MODNAMES :=
+
+SUSYHDCALL_INSTALL_DIR := $(INSTALL_DIR)/$(DIR)
+
+.PHONY:		all-$(MODNAME) all-$(MODNAME)-src all-$(MODNAME)-lib \
+		clean-$(MODNAME) distclean-$(MODNAME)
+
+all-$(MODNAME):	all-$(MODNAME)-lib
+
+ifneq ($(INSTALL_DIR),)
+install-src::
+		install -d $(SUSYHDCALL_INSTALL_DIR)
+		install -m u=rw,g=r,o=r $(SUSYHDCALL_HDR) $(SUSYHDCALL_INSTALL_DIR)
+		install -m u=rw,g=r,o=r $(SUSYHDCALL_MK) $(SUSYHDCALL_INSTALL_DIR)
+endif
+
+include $(patsubst %, %/module.mk, $(SUBMODULES))
+
+all-$(MODNAME)-src:	$(SUSYHDCALL_ALLSRC)
+
+all-$(MODNAME)-lib:	$(SUSYHDCALL_ALLLIB)
+
+clean-$(MODNAME)-dep: $(patsubst %, clean-%-dep, $(SUSYHDCALL_MODNAMES))
+
+clean-$(MODNAME)-obj: $(patsubst %, clean-%-obj, $(SUSYHDCALL_MODNAMES))
+
+clean-$(MODNAME): clean-$(MODNAME)-dep clean-$(MODNAME)-obj
+
+distclean-$(MODNAME): clean-$(MODNAME)
+
+clean::		clean-$(MODNAME)
+
+distclean::	distclean-$(MODNAME)
+
+ALLDEP += $(SUSYHDCALL_ALLDEP)
+ALLSRC += $(SUSYHDCALL_ALLSRC)
+ALLLIB += $(SUSYHDCALL_ALLLIB)

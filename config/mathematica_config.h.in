@@ -1,0 +1,18 @@
+/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
+/* generated at @DATE@ */
+
+#ifndef MATHEMATICA_CONFIG_H
+#define MATHEMATICA_CONFIG_H
+
+/* Switches */
+
+/* Use MathLink */
+@DEFINE_ENABLE_MATHLINK_H@
+
+#ifdef ENABLE_MATHLINK_H
+#define MLINK_INTERFACE_VERSION MLINTERFACE
+#else
+#define MLINK_INTERFACE_VERSION WSINTERFACE
+#endif
+
+#endif

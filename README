@@ -1,0 +1,90 @@
+SUSYHDCall
+==========
+
+SUSYHDCall is a small add-on for FlexibleSUSY providing an
+interface for calling the Mathematica package SUSYHD from
+within C++ code.  The purpose of the library is to provide a
+convenient means of using SUSYHD simultaneously with other
+codes, without having to write additional glue code.  While
+intended as an addon for FlexibleSUSY, the code can also be
+compiled as a standalone library and linked to other spectrum
+generators for convenient use in scans.
+
+If you use FlexibleSUSY in your work please cite the
+FlexibleSUSY manual,
+
+ [1] FlexibleSUSY -- A spectrum generator generator for 
+     supersymmetric models
+     [CPC 190 (2015) 139-172 (arXiv:1406.2319 [hep-ph])]
+
+FlexibleSUSY depends on SARAH and contains components from
+SOFTSUSY, so please also cite
+
+ [2] SARAH
+     [CPC 181 (2010) 1077-1086 (arXiv:0909.2863 [hep-ph]),
+      CPC 182 (2011) 808-833 (arXiv:1002.0840 [hep-ph]),
+      CPC 184 (2013) 1792-1809 (arXiv:1207.0906 [hep-ph]),
+      CPC 185 (2014) 1773-1790 (arXiv:1309.7223 [hep-ph])]
+
+ [3] SOFTSUSY
+     [CPC 143 (2002) 305-331 (arXiv:hep-ph/0104145),
+      CPC 185 (2014) 2322 (arXiv:1311.7659)]
+
+If you use SUSYHD in your work, please cite
+
+ [4] SUSYHD: Higgs mass determination in supersymmetry
+     [JHEP 1507 (2015) 159 (arXiv:1504.05200 [hep-ph])]
+
+Requirements
+============
+
+ * C++ compiler (g++ >= 4.8.2 or clang++ >= 3.6)
+ * Mathematica (version 7.0 or higher), with MathLink
+   or WSTP developer kits
+ * SUSYHD (version 1.0.2 or higher)   http://users.ictp.it/~susyhd/
+
+Optional
+
+ * FlexibleSUSY (version 1.0.4 or higher)   https://flexiblesusy.hepforge.org
+
+Compiling the source code
+=========================
+
+To compile the library, first create the Makefile by running
+configure,
+
+   $ ./configure
+
+or first run ./configure -h to view the possible options that can
+be used.  Then compile,
+
+   $ make
+
+Optionally you may run some tests to ensure the compilation
+succeeded by running
+
+   $ make check
+
+Installing as a FlexibleSUSY addon
+==================================
+
+To install the package as a FlexibleSUSY addon, provide the path to
+the FlexibleSUSY addons directory during the configuration step,
+
+   $ ./configure --with-fs-addons-dir=/path/to/FlexibleSUSY/addons
+
+The addon can then be installed by running
+
+   $ make install-addon
+
+which creates the directory addons/susyhd_call and copies the source
+code to that directory.  A Makefile module is also created in this
+directory for building the addon.  To compile the addon, configure
+FlexibleSUSY and run make,
+
+   $ cd /path/to/FlexibleSUSY
+   $ ./configure --with-addons=susyhd_call
+   $ make
+
+Note that it is not necessary to run the createaddon script; the
+required Makefile modules are created in the install process.

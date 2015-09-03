@@ -1,0 +1,10 @@
+// ====================================================================
+// Header to include to use SUSYHDCall
+// ====================================================================
+
+#ifndef SUSYHDCALL_H
+#define SUSYHDCALL_H
+
+#include "susyhd/susyhd_link.hpp"
+
+#endif

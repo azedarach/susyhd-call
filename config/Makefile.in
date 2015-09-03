@@ -1,0 +1,172 @@
+# Package information
+PKGNAME	           := @PKGNAME@
+SUSYHDCALL_VERSION := @SUSYHDCALL_VERSION@
+SUSYHDCALL_MAJOR   := @SUSYHDCALL_MAJOR@
+SUSYHDCALL_MINOR   := @SUSYHDCALL_MINOR@
+SUSYHDCALL_PATCH   := @SUSYHDCALL_PATCH@
+ABSBASEDIR         := @ABSBASEDIR@
+FSADDONS_DIR       := @FSADDONS_DIR@
+ADDON_DIR          := @ADDON_DIR@
+ifneq ($(FSADDONS_DIR),)
+INSTALL_DIR        := $(FSADDONS_DIR)/$(ADDON_DIR)
+endif
+
+# Makefile switches
+ENABLE_STATIC_LIBS := @ENABLE_STATIC_LIBS@
+
+# C/C++ preprocessor defines
+ENABLE_DEBUG       := @ENABLE_DEBUG@
+ENABLE_MATHLINK_H  := @ENABLE_MATHLINK_H@
+
+# Makefile modules
+MODULES	           := config mathematica susyhd test
+
+# Variables for Mathematica
+MATH               := @MATH@
+
+# Variables for compilation
+CXX                := @CXX@
+CPPFLAGS           := @CPPFLAGS@ $(patsubst %,-I%,$(MODULES)) -I.
+CXXFLAGS           := @CXXFLAGS@
+CXX_DEP_GEN        := @CXX_DEP_GEN@
+CXXFLAGS_DEP_GEN   := @CXXFLAGS_DEP_GEN@
+CC                 := @CC@
+CFLAGS             := @CFLAGS@ $(patsubst %,-I%,$(MODULES)) -I.
+CC_DEP_GEN         := @CC_DEP_GEN@
+CFLAGS_DEP_GEN     := @CFLAGS_DEP_GEN@
+MAKELIB            := @MAKELIB@
+LDFLAGS            := @LDFLAGS@
+LDLIBS             := @LDLIBS@
+LIBEXT             := @LIBEXT@
+DLLIBS             := @DLLIBS@
+RTLIBS             := @RTLIBS@
+UUIDLIBS           := @UUIDLIBS@
+THREADLIBS         := @THREADLIBS@
+MLINKFLAGS         := @MLINKFLAGS@
+MLINKLIBS          := @MLINKLIBS@
+EXTRA_MLINK_LIBS   := @EXTRA_MLINK_LIBS@
+
+# the modules add their dependency files to this variable
+SUSYHDCALL_ALLDEP   :=
+# the modules add source files to be created to this variable
+SUSYHDCALL_ALLSRC   :=
+# the modules add their libraries to this variable
+SUSYHDCALL_ALLLIB   :=
+# the modules add test executables to this variable
+SUSYHDCALL_ALLTST   :=
+# the modules register their names in this variable
+SUSYHDCALL_MODNAMES :=
+
+# configure script
+CONFIGURE_SCRIPT := $(ABSBASEDIR)/configure
+
+# script which installs a Makefile module with paths
+# and rules compatible with FlexibleSUSY's addon system
+INSTALL_ADDON_MK := \
+		$(ABSBASEDIR)/config/install_addon_submodule_mk.sh
+
+# README file
+README_FILE := $(ABSBASEDIR)/README
+
+# main addon module.mk
+SUSYHDCALL_MK := config/module.susyhdcall.mk
+
+# main header to include if using the package
+SUSYHDCALL_H  := $(ABSBASEDIR)/susyhd_call.hpp
+
+.PHONY:  all allsrc alllib alltest check \
+         clean clean-dep depend distclean showbuild
+
+all:	alllib
+
+ifeq ($(FSADDONS_DIR),)
+install-addon::
+	$(error FlexibleSUSY addons directory is not set! To set it please run: ./configure --with-fs-addons-dir=/path/to/FlexibleSUSY/addons/)
+else
+install-addon::
+	install -d $(INSTALL_DIR)
+	install -m u=rw,g=r,o=r $(README_FILE) $(INSTALL_DIR)/README
+	install -m u=rw,g=r,o=r $(SUSYHDCALL_MK) $(INSTALL_DIR)/module.mk
+	install -m u=rw,g=r,o=r $(SUSYHDCALL_H) $(INSTALL_DIR)/susyhd_call.hpp
+endif
+
+include config/abspathx.mk
+include $(patsubst %, %/module.mk, $(MODULES))
+
+ifneq ($(MAKECMDGOALS),clean)
+ifneq ($(MAKECMDGOALS),distclean)
+ifneq ($(MAKECMDGOALS),install-addon)
+ifneq ($(MAKECMDGOALS),showbuild)
+ifneq ($(MAKECMDGOALS),depend)
+ifeq ($(findstring clean-,$(MAKECMDGOALS)),)
+ifeq ($(findstring distclean-,$(MAKECMDGOALS)),)
+ifeq ($(findstring print-,$(MAKECMDGOALS)),)
+-include $(SUSYHDCALL_ALLDEP)
+endif
+endif
+endif
+endif
+endif
+endif
+endif
+endif
+
+allsrc:   $(SUSYHDCALL_ALLSRC)
+alllib:   $(SUSYHDCALL_ALLLIB)
+alltest:  $(SUSYHDCALL_ALLTST)
+
+check: alltest
+
+clean-dep:
+	-rm -f $(SUSYHDCALL_ALLDEP)
+
+depend:  clean-dep
+depend:  $(SUSYHDCALL_ALLDEP)
+
+%.d: %.cpp
+# -MT '$*.o' ensures that the target contains the full path
+	$(CXX_DEP_GEN) $(CPPFLAGS) $(CXXFLAGS_DEP_GEN) -MM -MP -MG -o $@ -MT '$*.o' $^
+
+%.d: %.c
+# -MT '$*.o' ensures that the target contains the full path
+	$(CC_DEP_GEN) $(CFLAGS) $(CFLAGS_DEP_GEN) -MM -MP -MG -o $@ -MT '$*.o' $^
+
+distclean::
+	-rm -f Makefile
+	-rm -f $(SUSYHDCALL_MK)
+	-rm -f config.log config.math config.status
+
+showbuild:
+	@echo "PKGNAME            = $(PKGNAME)"
+	@echo "VERSION            = $(VERSION)"
+	@echo "ABSBASEDIR         = $(ABSBASEDIR)"
+	@echo "FSADDONS_DIR       = $(FSADDONS_DIR)"
+	@echo "ADDON_DIR          = $(ADDON_DIR)"
+	@echo ""
+	@echo "MATH               = $(MATH)"
+	@echo ""
+	@echo "CXX                = $(CXX)"
+	@echo "CPPFLAGS           = $(CPPFLAGS)"
+	@echo "CXXFLAGS           = $(CXXFLAGS)"
+	@echo "CXX_DEP_GEN        = $(CXX_DEP_GEN)"
+	@echo "CXXFLAGS_DEP_GEN   = $(CXXFLAGS_DEP_GEN)"
+	@echo "MAKELIB            = $(MAKELIB)"
+	@echo "LDFLAGS            = $(LDFLAGS)"
+	@echo "LDLIBS             = $(LDLIBS)"
+	@echo "LIBEXT             = $(LIBEXT)"
+	@echo "DLLIBS             = $(DLLIBS)"
+	@echo "RTLIBS             = $(RTLIBS)"
+	@echo "THREADLIBS         = $(THREADLIBS)"
+	@echo "MLINKFLAGS         = $(MLINKFLAGS)"
+	@echo "MLINKLIBS          = $(MLINKLIBS)"
+	@echo "EXTRA_MLINK_LIBS   = $(EXTRA_MLINK_LIBS)"
+	@echo ""
+	@echo "ENABLE_DEBUG       = $(ENABLE_DEBUG)"
+	@echo "ENABLE_MATHLINK_H  = $(ENABLE_MATHLINK_H)"
+	@echo "ENABLE_STATIC_LIBS = $(ENABLE_STATIC_LIBS)"
+	@echo ""
+	@echo "The list of modules to be built:"
+	@echo "--------------------------------"
+	@echo "$(MODULES)"
+
+print-% : ; @echo $* = $($*)

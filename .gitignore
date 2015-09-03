@@ -1,0 +1,14 @@
+*~
+*.o
+*.a
+*.so
+*.d
+*.x
+
+config/version
+config.status
+config.log
+config.math
+Makefile
+
+mathematica/mathematica_config.h
