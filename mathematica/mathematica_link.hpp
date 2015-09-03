@@ -24,7 +24,6 @@ public:
    void put_integer(int n);
    void put_string(const char* s);
    void put_symbol(const char* s);
-   void flush();
 
    // wrappers for Get<object> methods
    int get_integer();
@@ -34,6 +33,7 @@ public:
    void new_packet();
    void end_packet();
    void wait_for_packet_of_type(Packet_type);
+   void flush();
 
    // wrapper for getting error code of last call
    int get_error();
