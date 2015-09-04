@@ -26,7 +26,8 @@ enum Scheme : unsigned { DRbar, OS };
 
 class SUSYHDLink {
 public:
-   SUSYHDLink();
+   SUSYHDLink(mathematica::MathematicaLink*);
+   SUSYHDLink(mathematica::MathematicaLink*, const char*);
    ~SUSYHDLink();
 
    double get_alphas_at_MZ() const;
@@ -58,7 +59,10 @@ private:
    bool numerical_rges;
    Higher_order_corrections corrections;
    Uncertainty_sources theory_errors;
-   std::shared_ptr<mathematica::MathematicaLink> kernel_link;
+   mathematica::MathematicaLink* kernel_link;
+
+   // load the package in Mathematica
+   void load_susyhd_package(const char* s = "SUSYHD.m");
 };
 
 } // namespace SUSYHD
