@@ -23,6 +23,7 @@ public:
    void put_expression(const char* s);
    void put_function(const char* s, int n);
    void put_integer(int n);
+   void put_real(double x);
    void put_string(const char* s);
    void put_symbol(const char* s);
 

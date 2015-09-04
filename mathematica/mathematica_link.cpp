@@ -68,6 +68,11 @@ void MathematicaLink::put_integer(int n)
    PREFIXED_MATH_FUNCTION(PutInteger)(link, n);
 }
 
+void MathematicaLink::put_real(double x)
+{
+   PREFIXED_MATH_FUNCTION(PutReal)(link, x);
+}
+
 void MathematicaLink::flush()
 {
    PREFIXED_MATH_FUNCTION(Flush)(link);
