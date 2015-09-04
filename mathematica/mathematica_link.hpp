@@ -41,6 +41,9 @@ public:
 private:
    MathEnv env;
    MathLink link;
+
+   MathematicaLink(const MathematicaLink&);
+   MathematicaLink& operator=(const MathematicaLink&);
 };
 
 } // namespace mathematica
