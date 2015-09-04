@@ -20,6 +20,7 @@ public:
    ~MathematicaLink();
 
    // wrappers for Put<object> methods
+   void put_expression(const char* s);
    void put_function(const char* s, int n);
    void put_integer(int n);
    void put_string(const char* s);
@@ -27,6 +28,7 @@ public:
 
    // wrappers for Get<object> methods
    int get_integer();
+   double get_real();
 
    // helper methods for handling packets
    void next_packet();

@@ -42,6 +42,12 @@ MathematicaLink::~MathematicaLink()
    PREFIXED_MATH_FUNCTION(Deinitialize)(env);
 }
 
+void MathematicaLink::put_expression(const char* s)
+{
+   PREFIXED_MATH_FUNCTION(PutFunction)(link, "ToExpression", 1);
+   PREFIXED_MATH_FUNCTION(PutString)(link, s);
+}
+
 void MathematicaLink::put_function(const char* s, int n)
 {
    PREFIXED_MATH_FUNCTION(PutFunction)(link, s, n);
@@ -71,6 +77,14 @@ int MathematicaLink::get_integer()
 {
    int result;
    PREFIXED_MATH_FUNCTION(GetInteger)(link, &result);
+
+   return result;
+}
+
+double MathematicaLink::get_real()
+{
+   double result;
+   PREFIXED_MATH_FUNCTION(GetReal)(link, &result);
 
    return result;
 }
