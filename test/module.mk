@@ -2,7 +2,8 @@ DIR      := test
 MODNAME  := test
 
 TEST_SRC := \
-		$(DIR)/test_mathematica_link.cpp
+		$(DIR)/test_mathematica_link.cpp \
+		$(DIR)/test_susyhd_link.cpp
 
 TEST_OBJ := \
 		$(patsubst %.cpp, %.o, $(filter %.cpp, $(TEST_SRC)))
@@ -43,6 +44,9 @@ execute-tests:	$(TEST_LOG)
 execute-compiled-tests:	$(TEST_EXE_LOG)
 
 $(DIR)/test_mathematica_link.x: $(DIR)/test_mathematica_link.o $(LIBMATHLINK)
+		$(CXX) -o $@ $(call abspathx,$^) $(MLINKLIBS)
+
+$(DIR)/test_susyhd_link.x: $(DIR)/test_susyhd_link.o $(LIBSUSYHDLINK) $(LIBMATHLINK)
 		$(CXX) -o $@ $(call abspathx,$^) $(MLINKLIBS)
 
 clean::		clean-$(MODNAME)
