@@ -17,7 +17,7 @@ MathematicaLink::MathematicaLink(int argc, char* argv[])
    if (env == static_cast<MathEnv>(0))
       throw InitializationError("Environment initialization failed in MathematicaLink(int argc, char* argv[])");
    link = PREFIXED_MATH_FUNCTION(OpenArgcArgv)(env, argc, argv, &error);
-   if (link == static_cast<MathLink>(0) || error != SUCCESS) {
+   if (link == static_cast<MathLink>(0) || error != MLINK_SUCCESS) {
       PREFIXED_MATH_FUNCTION(Deinitialize)(env);
       throw LinkOpenError("Opening link failed in MathematicaLink(int argc, char* argv[])");
    }
@@ -30,7 +30,7 @@ MathematicaLink::MathematicaLink(const char* args)
    if (env == static_cast<MathEnv>(0))
       throw InitializationError("Environment initialization failed in MathematicaLink(const char* args)");
    link = PREFIXED_MATH_FUNCTION(OpenString)(env, args, &error);
-   if (link == static_cast<MathLink>(0) || error != SUCCESS) {
+   if (link == static_cast<MathLink>(0) || error != MLINK_SUCCESS) {
       PREFIXED_MATH_FUNCTION(Deinitialize)(env);
       throw LinkOpenError("Opening link failed in MathematicaLink(const char* args)");
    }
