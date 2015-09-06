@@ -16,6 +16,7 @@ MLINKFLAGS       := @MLINKFLAGS@
 MLINKLIBS        := @MLINKLIBS@
 DLLIBS           := @DLLIBS@
 RTLIBS           := @RTLIBS@
+UUIDLIBS         := @UUIDLIBS@
 EXTRA_MLINK_LIBS := @EXTRA_MLINK_LIBS@
 
 # the submodules add their dependency files to this variable
