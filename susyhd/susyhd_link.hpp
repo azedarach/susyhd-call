@@ -14,8 +14,6 @@
 #include "susyhd_higher_order_corrections.hpp"
 #include "susyhd_uncertainty_sources.hpp"
 
-#include <memory>
-
 namespace mathematica {
 class MathematicaLink;
 }
