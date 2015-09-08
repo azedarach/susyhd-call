@@ -1811,9 +1811,8 @@ if test "x${operating_system}" = "xLinux" ; then
     check_thread_libs
     check_dl_libs
     check_rt_libs
-    if test "x${MATH_VERSION}" = "x10." ; then
-	check_uuid_libs
-    fi
+    # TODO: need to test for versions >= 10
+    check_uuid_libs
 fi
 if test "x${enable_mathlink}" = "xyes" ; then
     check_mathlink_incl
