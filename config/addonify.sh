@@ -10,6 +10,8 @@ install_addon_rule="install-addon::"
 install_src_rule="install-src::"
 install_script_rule="^\t\t\$(INSTALL_ADDON_MK) *\(.*\) -m u=rw,g=r,o=r"
 install_module_rule="\t\tinstall -m u=rw,g=r,o=r \1"
+begin_marker="# *BEGIN: *NOT EXPORTED *#*"
+end_marker="# *END: *NOT EXPORTED *#*"
 
 if test $# -lt 1 ; then
     # read from stdin
@@ -17,6 +19,7 @@ if test $# -lt 1 ; then
         sed -e "s/${standalone_dir_defn}/${addon_dir_defn}/" \
 	    -e "s/${install_addon_rule}/${install_src_rule}/" \
 	    -e "s/${install_script_rule}/${install_module_rule}/" \
+	    -e "/${begin_marker}/,/${end_marker}/d" \
 	< /dev/stdin
     fi
 else
@@ -25,5 +28,6 @@ else
     sed -e "s/${standalone_dir_defn}/${addon_dir_defn}/" \
 	-e "s/${install_addon_rule}/${install_src_rule}/" \
 	-e "s/${install_script_rule}/${install_module_rule}/" \
+	    -e "/${begin_marker}/,/${end_marker}/d" \
 	${input_file}
 fi

@@ -54,7 +54,9 @@ clean-$(MODNAME): clean-$(MODNAME)-dep clean-$(MODNAME)-obj
 		-rm -f $(LIBMATHLINK)
 
 distclean-$(MODNAME): clean-$(MODNAME)
+# BEGIN: NOT EXPORTED ##########################################
 		-rm -f $(LIBMATHLINK_CONFIG_HDR)
+# END:   NOT EXPORTED ##########################################
 
 clean::		clean-$(MODNAME)
 
