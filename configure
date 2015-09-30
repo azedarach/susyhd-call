@@ -84,6 +84,7 @@ CFLAGS_DEP_GEN=""
 THREADLIBS=""
 DLLIBS=""
 RTLIBS=""
+NEEDSUUID="no"
 UUIDLIBS=""
 LDFLAGS=""
 LDLIBS=""
@@ -1254,10 +1255,15 @@ check_math_cmd() {
 #_____________________________________________________________________
 check_mathematica_version() {
     local _math_version_check_progr="${BASEDIR}/check_math_version.m"
+    local _needs_uuid_check="${BASEDIR}/needs_libuuid"
     rm -f ${mathconfig} ${_math_version_check_progr}
     cat <<EOF > ${_math_version_check_progr}
 error = 0;
 Put[\$VersionNumber, "${mathconfig}"];
+If[\$VersionNumber >= 10,
+   Put[yes, "${_needs_uuid_check}"],
+   Put[no, "${_needs_uuid_check}"]
+  ];
 If[\$VersionNumber < ${required_mathematica_version},
    error = 1;
   ];
@@ -1273,13 +1279,20 @@ EOF
         else
             result "ok"
         fi
+	if test -r "${_needs_uuid_check}" ; then
+	    NEEDSUUID=`cat ${_needs_uuid_check}`
+	else
+	    message "Warning: unable to determine if libuuid is required"
+	fi
     else
         result "not ok"
         message "Error: Mathematica ${required_mathematica_version} or higher needs to be installed!"
         rm -f ${_math_version_check_progr}
+	rm -f ${_needs_uuid_check}
         exit 1
     fi
     rm -f ${_math_version_check_progr}
+    rm -f ${_needs_uuid_check}
 }
 
 #_____________________________________________________________________
@@ -1811,8 +1824,9 @@ if test "x${operating_system}" = "xLinux" ; then
     check_thread_libs
     check_dl_libs
     check_rt_libs
-    # TODO: need to test for versions >= 10
-    check_uuid_libs
+    if test "x${NEEDSUUID}" = "xyes" ; then
+	check_uuid_libs
+    fi
 fi
 if test "x${enable_mathlink}" = "xyes" ; then
     check_mathlink_incl

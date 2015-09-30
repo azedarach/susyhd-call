@@ -156,6 +156,7 @@ showbuild:
 	@echo "LIBEXT             = $(LIBEXT)"
 	@echo "DLLIBS             = $(DLLIBS)"
 	@echo "RTLIBS             = $(RTLIBS)"
+	@echo "UUIDLIBS           = $(UUIDLIBS)"
 	@echo "THREADLIBS         = $(THREADLIBS)"
 	@echo "MLINKFLAGS         = $(MLINKFLAGS)"
 	@echo "MLINKLIBS          = $(MLINKLIBS)"
